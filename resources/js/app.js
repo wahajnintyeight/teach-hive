@@ -2,7 +2,7 @@ import './bootstrap';
 
 import { createApp } from 'vue'
 // import Test from './ /components/Test'
-import Test from './components/Test.vue'
+import Index from './components/Index.vue'
 
 console.log("HI")
-createApp(Test).mount("#app")
+createApp(Index).mount("#app")
