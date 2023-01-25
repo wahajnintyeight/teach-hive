@@ -4,10 +4,12 @@
             <div class="container m-auto px-6 md:px-12 lg:px-6">
                 <div class="flex flex-wrap items-center justify-between py-6 md:py-4 md:gap-0">
                     <div class="w-full flex items-center justify-between lg:w-auto">
-                        <a href="#" class="text-lg p-1 text-white font-bold" style="font-size:35px;" aria-label="logo">
-                            <!-- <img src="images/logo.svg" class="w-36" alt="tailus logo" width="144" height="48"> -->
-                            TeachHive.
-                        </a>
+                        <router-link to="/">
+                            <span class="text-lg p-1 text-white font-bold" style="font-size:35px;" aria-label="logo">
+                                <!-- <img src="images/logo.svg" class="w-36" alt="tailus logo" width="144" height="48"> -->
+                                TeachHive.
+                            </span>
+                        </router-link>
 
                         <div class="block max-w-max">
                             <button aria-label="humburger" id="hamburger" class="block relative h-auto lg:hidden">
@@ -59,12 +61,14 @@
                                 </li>
 
                                 <li class="flex w-full lg:max-w-max justify-center">
-                                    <button type="button" title="Start buying"
-                                        class="flex w-full py-3  px-6 rounded-lg text-center transition  bg-white justify-center max-w-lg lg:max-w-max">
-                                        <span class="block text-sm text-purple-600 font-semibold">
-                                            Sign Up
-                                        </span>
-                                    </button>
+                                    <router-link to="/signup">
+                                        <button type="button" title="Start buying"
+                                            class="flex w-full py-3  px-6 rounded-lg text-center transition  bg-white justify-center max-w-lg lg:max-w-max">
+                                            <span class="block text-sm text-purple-600 font-semibold">
+                                                Sign Up
+                                            </span>
+                                        </button>
+                                    </router-link>
                                 </li>
                             </ul>
                         </div>
@@ -73,6 +77,7 @@
             </div>
         </nav>
     </header>
+    <router-view />
 </template>
 <script>
 export default {
