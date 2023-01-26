@@ -9,17 +9,7 @@
                 <div class="mt-8">
                     <!-- <span class="m-4 text-center">Sign Up</span> -->
                     <div class="mt-4">
-                        <form action="#" @submit.prevent="register()" method="POST" class="space-y-6">
-
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-neutral-600"> Full Name
-                                </label>
-                                <div class="mt-1">
-                                    <input id="fname" v-model="fname" name="fname" type="text" required
-                                        placeholder="Your Full Name"
-                                        class="block w-full px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300">
-                                </div>
-                            </div>
+                        <form action="#" @submit.prevent="login()" method="POST" class="space-y-6">
 
                             <div>
                                 <label for="email" class="block text-sm font-medium text-neutral-600"> Email address
@@ -37,16 +27,6 @@
                                 <div class="mt-1">
                                     <input id="password" v-model="password" name="password" type="password"
                                         autocomplete="current-password" required="" placeholder="Your Password"
-                                        class="block w-full px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300">
-                                </div>
-                            </div>
-                            <div class="space-y-1">
-                                <label for="password" class="block text-sm font-medium text-neutral-600">Confirm
-                                    Password
-                                </label>
-                                <div class="mt-1">
-                                    <input id="password" v-model="password2" name="password" type="password"
-                                        autocomplete="current-password" required="" placeholder="Confirm Password"
                                         class="block w-full px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300">
                                 </div>
                             </div>
@@ -87,39 +67,36 @@ export default {
     name: 'SignUp',
     data() {
         return {
-            password2: '',
+
             isShaking: false,
             password: '',
             email: '',
-            fname: '',
             isLoading: false,
             payload: {}
         };
     },
     methods: {
-        async register() {
+        async login() {
             this.isLoading = true
             this.payload = {
-                'name': this.fname,
                 'email': this.email,
                 'password': this.password,
-                'c_password': this.password2,
-                'role_id': 0,
             }
             try {
-                if (this.password != this.password2) {
+
+                const response = await axios.post('http://localhost:8000/api/login', this.payload);
+                // if (typeof response != 'undefined') {
+                this.isLoading = false;
+                this.$swal(response.data.message);
+                if (response.data.success == false) {
                     this.isShaking = true;
+                    console.log(response.data);
                 } else {
-                    const response = await axios.post('http://localhost:8000/api/register', this.payload);
-                    // if (typeof response != 'undefined') {
-                    this.isLoading = false;
-                    this.$swal(response.data.message);
-                    if (response.data.success == false) {
-                        this.isShaking = true;
-                        console.log(response.data);
-                    }
-                    // }
+                    localStorage.setItem("token", response.data.data.token)
+                    localStorage.setItem("name", response.data.data.name)
                 }
+                // }
+
             } catch (error) {
                 this.isLoading = false;
                 console.error(error)

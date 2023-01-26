@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\BaseController as BaseController;
+use Illuminate\Support\Facades\Log;
+use Validator;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
 
 class RegisterController extends BaseController
 {
@@ -14,6 +19,7 @@ class RegisterController extends BaseController
             'email' => 'required|email',
             'password' => 'required',
             'c_password' => 'required|same:password',
+            'role_id' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -21,30 +27,38 @@ class RegisterController extends BaseController
         }
 
         $input = $request->all();
+        $input['role_id'] = 0;
         $input['password'] = bcrypt($input['password']);
-        // dd($input)
-        if (User::all()->find("email",$input['email'])){
+        // Log::channel('stderr')->info($input);
+        // dd(count(User::where("email", $input['email'])->get()));
+        if (count(User::where("email", $input['email'])->get()) > 0) {
             $success['token'] = "";
             $success['name'] = "";
-            return $this->sendResponse($success, 'Email already exists.',false);
+            return $this->sendResponse($success, 'Email already exists.', false);
         }
         $user = User::create($input);
-        $success['token'] = $user->createToken(config("server_name"))->plainTextToken;
+        Log::channel('stderr')->info($user);
+        $success['token'] = $user->createToken("teach-hive")->plainTextToken;
         $success['name'] = $user->name;
 
-        return $this->sendResponse($success, 'User register successfully.',true);
+        return $this->sendResponse($success, 'User register successfully.', true);
     }
 
     public function login(Request $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            $success['token'] = $user->createToken(config("server_name"))->plainTextToken;
+            $success['token'] = $user->createToken("teach-hive")->plainTextToken;
             $success['name'] = $user->name;
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {
             return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
         }
+    }
+    public function logout(){
+        Auth::logout();
+        // return $this->sendResponse($success, 'User login successfully.');
+
     }
 }

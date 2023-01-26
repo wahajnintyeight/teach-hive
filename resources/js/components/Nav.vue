@@ -28,6 +28,20 @@
                             <ul
                                 class="space-y-6 pb-6 tracking-wide font-medium text-gray-800 lg:text-gray-100 lg:pb-0 lg:pr-6 lg:items-center lg:flex lg:space-y-0">
                                 <li>
+                                    <router-link to="/">
+                                        <span class="block md:px-3">
+                                            <span>Home</span>
+                                        </span>
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link to="/courses">
+                                        <span class="block md:px-3">
+                                            <span>Courses</span>
+                                        </span>
+                                    </router-link>
+                                </li>
+                                <li>
                                     <a href="#" class="block md:px-3">
                                         <span>Services</span>
                                     </a>
@@ -49,28 +63,46 @@
                                 </li>
                             </ul>
 
-                            <ul
-                                class="border-t w-full lg:w-max gap-3 pt-2 lg:pt-0 lg:pl-2 lg:border-t-0 lg:border-l flex flex-col lg:gap-0 lg:items-center lg:flex-row">
-                                <li class="flex w-full lg:max-w-max justify-center">
-                                    <button type="button" title="Start buying"
-                                        class="flex w-full py-3 px-6 rounded-md text-center transition border border-purple-600 bg-white bg-opacity-40 backdrop-blur-md lg:backdrop-blur-none lg:bg-opacity-0 lg:bg-transparent lg:border-transparent active:border-purple-400 justify-center max-w-lg lg:max-w-max">
-                                        <span class="block text-gray-700 lg:text-white font-semibold">
-                                            Login
-                                        </span>
-                                    </button>
-                                </li>
+                            <div v-if="name === null">
+                                <ul
+                                    class="border-t w-full lg:w-max gap-3 pt-2 lg:pt-0 lg:pl-2 lg:border-t-0 lg:border-l flex flex-col lg:gap-0 lg:items-center lg:flex-row">
+                                    <li class="flex w-full lg:max-w-max justify-center">
+                                        <router-link to="/signin">
 
-                                <li class="flex w-full lg:max-w-max justify-center">
-                                    <router-link to="/signup">
+                                            <button type="button" title="Start buying"
+                                                class="flex w-full py-3 px-6 rounded-md text-center transition border border-purple-600 bg-white bg-opacity-40 backdrop-blur-md lg:backdrop-blur-none lg:bg-opacity-0 lg:bg-transparent lg:border-transparent active:border-purple-400 justify-center max-w-lg lg:max-w-max">
+                                                <span class="block text-gray-700 lg:text-white font-semibold">
+                                                    Login
+                                                </span>
+                                            </button>
+                                        </router-link>
+                                    </li>
+
+                                    <li class="flex w-full lg:max-w-max justify-center">
+                                        <router-link to="/signup">
+                                            <button type="button" title="Start buying"
+                                                class="flex w-full py-3  px-6 rounded-lg text-center transition  bg-white justify-center max-w-lg lg:max-w-max">
+                                                <span class="block text-sm text-purple-600 font-semibold">
+                                                    Sign Up
+                                                </span>
+                                            </button>
+                                        </router-link>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-else>
+                                <ul
+                                    class="border-t w-full lg:w-max gap-3 pt-2 lg:pt-0 lg:pl-2 lg:border-t-0 lg:border-l flex flex-col lg:gap-0 lg:items-center lg:flex-row">
+                                    <li class="flex w-full lg:max-w-max justify-center">
                                         <button type="button" title="Start buying"
                                             class="flex w-full py-3  px-6 rounded-lg text-center transition  bg-white justify-center max-w-lg lg:max-w-max">
                                             <span class="block text-sm text-purple-600 font-semibold">
-                                                Sign Up
+                                                Hi,{{ name }}
                                             </span>
                                         </button>
-                                    </router-link>
-                                </li>
-                            </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -81,6 +113,17 @@
 </template>
 <script>
 export default {
+    created() {
+        console.log(localStorage.getItem("name"));
+        if (localStorage.getItem("name") != null) {
+            this.name = localStorage.getItem('name')
+        }
+    },
+    data() {
+        return {
+            name: null
+        }
+    },
     name: "Nav",
 }
 </script>
